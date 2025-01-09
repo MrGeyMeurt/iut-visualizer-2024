@@ -4,6 +4,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 import Line from "./objects/Line";
+import Board from "./objects/Board";
 
 class Scene {
   constructor() {}
@@ -12,6 +13,8 @@ class Scene {
     this.canvas = canvas;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+
+    this.currentObject = null;
 
     // instantier la logique three.js
     this.setupScene();
@@ -34,14 +37,15 @@ class Scene {
   }
 
   addObjects() {
-    // this.geometry = new THREE.BoxGeometry(1, 1, 1);
-    // this.material = new THREE.MeshNormalMaterial();
-    // this.mesh = new THREE.Mesh(this.geometry, this.material);
-    // this.scene.add(this.mesh);
-
-    // Line
+    // Déclaration des objets
     this.line = new Line();
+    this.board = new Board();
+    // ....
+
+    // ajout de l'objet à la scène par défaut
+    this.camera.position.z = 200;
     this.scene.add(this.line.group);
+    this.currentObject = this.line;
   }
 
   onResize = () => {
@@ -71,7 +75,7 @@ class Scene {
       1000
     );
 
-    this.camera.position.z = 200;
+    // this.camera.position.z = 20;
   }
 
   setupRenderer() {
@@ -84,15 +88,37 @@ class Scene {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   }
 
+  pickVisualizer(index) {
+    // on remove le group qui est rendu
+    this.scene.remove(this.currentObject.group);
+
+    // on change le current object
+    switch (index) {
+      case 0:
+        // line
+        this.camera.position.z = 200;
+        this.currentObject = this.line;
+        break;
+      case 1:
+        // board
+        this.camera.position.z = 20;
+        this.currentObject = this.board;
+        break;
+      default:
+        break;
+    }
+
+    // on add le nouveau group
+    this.scene.add(this.currentObject.group);
+  }
+
   tick = (time, deltaTime, frame) => {
     this.stats.begin();
 
     this.renderer.render(this.scene, this.camera);
 
-    // this.mesh.rotation.z += 0.01;
-    // this.mesh.rotation.y += 0.01;
-    if (this.line) {
-      this.line.update();
+    if (this.currentObject) {
+      this.currentObject.update();
     }
 
     this.stats.end();
