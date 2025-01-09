@@ -38,6 +38,7 @@ const Dropzone = () => {
     accept: {
       "audio/mpeg": [],
       "audio/mp3": [],
+      "audio/flac": [],
       "audio/wav": [],
     },
   });
