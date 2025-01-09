@@ -14,7 +14,7 @@ export default class Board {
     });
 
     this.pinkMaterial = new THREE.MeshBasicMaterial({
-      color: 0x8f00ff,
+      color: 0x1DB954, // Green Spotify color
     });
 
     for (let y = 0; y < this.width; y++) {
