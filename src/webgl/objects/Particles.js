@@ -8,7 +8,6 @@ export default class Particles {
     this.positions = new Float32Array(this.particleCount * 3);
     this.scales = new Float32Array(this.particleCount);
 
-    // Création de la géométrie avec buffer pour meilleures performances
     this.geometry = new THREE.BufferGeometry();
     this.material = new THREE.PointsMaterial({
       size: 0.5,
@@ -17,7 +16,6 @@ export default class Particles {
       blending: THREE.AdditiveBlending
     });
 
-    // Positionnement aléatoire des particules
     for(let i = 0; i < this.particleCount; i++) {
       this.positions[i * 3] = (Math.random() - 0.5) * 20;
       this.positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
@@ -36,17 +34,13 @@ export default class Particles {
     const scales = this.geometry.attributes.scale.array;
 
     for(let i = 0; i < this.particleCount; i++) {
-      // Réaction aux fréquences audio
       const frequency = audioController.fdata[i % 256] / 255;
       
-      // Animation des positions
       positions[i * 3 + 1] += Math.sin(Date.now() * 0.001 + i) * 0.01;
       positions[i * 3 + 2] += Math.cos(Date.now() * 0.001 + i) * 0.01;
       
-      // Échelle dynamique
       scales[i] = frequency * 2;
       
-      // Changement de couleur progressive
       this.material.color.lerp(
         new THREE.Color().setHSL(frequency, 0.8, 0.5), 
         0.1

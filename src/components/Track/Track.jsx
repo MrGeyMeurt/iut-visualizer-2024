@@ -3,10 +3,8 @@ import scene from "../../webgl/Scene";
 import { useStore } from "../../utils/store";
 import s from "./Track.module.scss";
 
-const Track = ({ title, cover, src, duration, artists, index, id, track }) => {
-  const { currentTrackSrc, setCurrentTrackSrc } = useStore();
-  const { favorites, setFavorites } = useStore();
-  const { addToQueue } = useStore();
+const Track = ({ title, cover, src, duration, artists, index, id }) => {
+  const { currentTrackSrc, setCurrentTrackSrc, favorites, setFavorites } = useStore();
 
   const isActive = currentTrackSrc === src;
   const isFavorite = favorites.includes(id);
@@ -56,15 +54,6 @@ const Track = ({ title, cover, src, duration, artists, index, id, track }) => {
     >
       <span className={s.order}>{index + 1}</span>
       <div className={s.title}>
-        <button 
-        className={s.queueButton}
-        onClick={(e) => {
-          e.stopPropagation();
-          addToQueue(track);
-        }}
-      >
-        x
-      </button>
         <button onClick={toggleFavorite} className={`${s.favoriteButton} ${isFavorite ? s.favorited : ''}`}>
           ♥
         </button>

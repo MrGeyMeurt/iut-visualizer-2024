@@ -17,7 +17,7 @@ const Dropzone = () => {
       acceptedFiles.forEach((file, i) => {
         const path = URL.createObjectURL(file);
 
-        //   // Créer un objet avec la structure similaire à celle de TRACKS dans TRACKS.js
+        // Créer un objet avec la structure similaire à celle de TRACKS dans TRACKS.js
         const _track = {
           name: file.name,
           path: path,

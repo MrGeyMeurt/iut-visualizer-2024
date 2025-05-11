@@ -35,7 +35,7 @@
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 800px; // Augmenter la largeur max
+  max-width: 800px;
   padding: 0 20px;
   z-index: 2;
   display: flex;
@@ -43,7 +43,7 @@
   align-items: center;
   
   .searchInput {
-    width: 100%;
+    width: 300px;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 30px;

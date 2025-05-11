@@ -6,86 +6,107 @@ class AudioController {
   constructor() {
     this.audio = null;
     this.ctx = null;
-    this.updateInterval = null;
+    this.isContextStarted = false;
+    this.fdata = null;
+    this.bpm = null;
+    this.analyserNode = null;
+    this.audioSource = null;
   }
 
-  setup() {
-
+  async setup() {
     if (!this.audio) {
       this.audio = new Audio();
-      this.audio.addEventListener('ended', () => {
-        useStore.getState().setCurrentTrackSrc(null);
-      });
+      this.audio.crossOrigin = "anonymous";
+      this.audio.volume = 0.1;
+
+      this.audio.addEventListener('timeupdate', this.updateTime);
+      this.audio.addEventListener('loadedmetadata', this.updateDuration);
+      this.audio.addEventListener('ended', this.playNext);
       this.audio.addEventListener('play', () => useStore.getState().setIsPlaying(true));
       this.audio.addEventListener('pause', () => useStore.getState().setIsPlaying(false));
       
-      // Créer le contexte audio une seule fois
+      gsap.ticker.add(this.tick);
+    }
+
+    if (!this.ctx) {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Configurer la chaîne audio une seule fois
-      this.analyserNode = new AnalyserNode(this.ctx, {
-        fftSize: 1024,
-        smoothingTimeConstant: 0.8,
-      });
-      
+      this.analyserNode = this.ctx.createAnalyser();
+      this.analyserNode.fftSize = 1024;
+      this.fdata = new Uint8Array(this.analyserNode.frequencyBinCount);
+    }
+
+    if (!this.audioSource && this.audio && this.ctx) {
       this.audioSource = this.ctx.createMediaElementSource(this.audio);
       this.audioSource.connect(this.analyserNode);
       this.audioSource.connect(this.ctx.destination);
-      
-      // Démarrer le contexte audio au premier clic
-      if (this.ctx.state === 'suspended') {
-        this.ctx.resume();
-      }
     }
-
-    this.audio.addEventListener('timeupdate', this.updateTime);
-    this.audio.addEventListener('loadedmetadata', this.updateDuration);
-
-    this.audio.addEventListener('ended', this.playNext);
-
-    this.audio.crossOrigin = "anonymous";
-    this.bpm = null;
-
-    // this.audio.src = danceTheNight;
-    this.audio.volume = 0.1;
-
-    this.fdata = new Uint8Array(this.analyserNode.frequencyBinCount);
-
-    gsap.ticker.add(this.tick);
-
-    this.audio.addEventListener("loadeddata", async () => {
-      await this.detectBPM();
-      // console.log(`The BPM is: ${bpm}`);
-    });
   }
 
-  detectBPM = async () => {
-    // Create an offline audio context to process the data
-    const offlineCtx = new OfflineAudioContext(
-      1,
-      this.audio.duration * this.ctx.sampleRate,
-      this.ctx.sampleRate
-    );
-    // Decode the current audio data
-    const response = await fetch(this.audio.src); // Fetch the audio file
-    const buffer = await response.arrayBuffer();
-    const audioBuffer = await offlineCtx.decodeAudioData(buffer);
-    // Use bpm-detective to detect the BPM
-    this.bpm = detect(audioBuffer);
-    // console.log(`Detected BPM: ${this.bpm}`);
-    // return bpm;
+  async handleFirstInteraction() {
+    if (!this.isContextStarted && this.ctx?.state === 'suspended') {
+      await this.ctx.resume();
+      this.isContextStarted = true;
+    }
+  }
+
+  async play(src) {
+    try {
+      await this.setup();
+      await this.handleFirstInteraction();
+
+      if (!src) throw new Error('No audio source provided');
+
+      this.audio.pause();
+      this.audio.src = src;
+      
+      await new Promise((resolve, reject) => {
+        this.audio.addEventListener('loadedmetadata', resolve);
+        this.audio.addEventListener('error', reject);
+        this.audio.load();
+      });
+
+      await this.audio.play();
+
+      useStore.getState().setCurrentTrackSrc(src);
+      
+    } catch (error) {
+      console.error("Playback error:", error);
+      this.playNext();
+    }
+  }
+
+  tick = () => {
+    if (this.analyserNode) {
+      this.analyserNode.getByteFrequencyData(this.fdata);
+    }
   };
 
-  play = (src) => {
-    if (!this.audio || !this.ctx) this.setup();
-    this.audio.src = src;
-    this.audio.play().catch(error => {
-      console.error("Erreur de lecture:", error);
-    });
+  updateTime = () => {
+    useStore.getState().setCurrentTime(this.audio?.currentTime || 0);
   };
+
+  updateDuration = () => {
+    useStore.getState().setDuration(this.audio?.duration || 0);
+  };
+
+  async detectBPM() {
+    try {
+      if (!this.audio.src) return;
+      
+      const response = await fetch(this.audio.src);
+      const buffer = await response.arrayBuffer();
+      const audioBuffer = await this.ctx.decodeAudioData(buffer);
+      
+      this.bpm = detect(audioBuffer);
+      useStore.getState().setBPM(this.bpm);
+      
+    } catch (error) {
+      console.error("BPM detection failed:", error);
+    }
+  }
 
   playNext = () => {
-    const { queue, tracks, currentTrackIndex, isShuffle } = useStore.getState();
+    const { queue, tracks = [], currentTrackIndex, isShuffle } = useStore.getState();
     
     if (queue.length > 0) {
       const [nextTrack, ...remaining] = queue;
@@ -103,18 +124,6 @@ class AudioController {
       this.play(tracks[newIndex].preview);
       useStore.setState({ currentTrackIndex: newIndex });
     }
-  };
-
-  tick = () => {
-    this.analyserNode.getByteFrequencyData(this.fdata);
-  };
-
-  updateTime = () => {
-    useStore.getState().setCurrentTime(this.audio.currentTime);
-  };
-
-  updateDuration = () => {
-    useStore.getState().setDuration(this.audio.duration);
   };
 
   togglePlayback = () => {
@@ -160,5 +169,9 @@ class AudioController {
 }
 
 const audioController = new AudioController();
+
+window.addEventListener('click', async () => {
+  await audioController.handleFirstInteraction();
+});
 
 export default audioController;

@@ -1,77 +1,93 @@
 .track {
+  --active-color: #fa2772;
+  --hover-bg: rgba(255, 255, 255, 0.03);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  
   display: flex;
   align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
   color: white;
-  //   margin-bottom: 20px;
-  padding: 10px 0;
-  padding-left: 10px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    cursor: pointer;
+    background: var(--hover-bg);
   }
-
+  
   &.active {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(
+      to right,
+      rgba(250, 39, 114, 0.1) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    box-shadow: inset 3px 0 0 var(--active-color);
     
-    &:hover {
-      background: rgba(255, 255, 255, 0.15) !important;
-    }
-  }
-
-  &[data-active="true"] {
-    background: rgba(255, 255, 255, 0.1) !important;
-    box-shadow: inset 3px 0 0 #fa2772;
-
     .order {
-      color: #fa2772;
-      font-weight: bold;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15) !important;
+      color: var(--active-color);
+      font-weight: 700;
     }
   }
 
   .order {
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  
+  .order {
     width: 10%;
   }
-
+  
   .title {
-    width: 50%;
     display: flex;
-    gap: 12px;
-
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+    width: 48%;
+    
     .cover {
-      height: 40px;
-      width: 40px;
-      object-fit: cover;
+      flex-shrink: 0;
+      height: 48px;
+      width: 48px;
       border-radius: 4px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
     }
-
+    
     .details {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-
+      
       .trackName {
-        text-overflow: ellipsis;
-        overflow: hidden;
+        font-weight: 500;
+        margin-bottom: 0.2rem;
         white-space: nowrap;
-        width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 30vw;
       }
-
+      
       .artistName {
-        font-size: 0.8rem;
-        color: gray;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
 }
 
 .favoriteButton {
+  --heart-size: 1.4rem;
+  --heart-color: #ff4081;
+
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.3);
@@ -79,7 +95,7 @@
   cursor: pointer;
   transition: all 0.3s;
   padding: 0 10px;
-
+  
   &.favorited {
     color: #ff0000;
     animation: pulse 0.5s;

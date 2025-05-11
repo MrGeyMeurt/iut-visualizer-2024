@@ -50,11 +50,9 @@ export default class SpectrumTorus {
   }
 
   update() {
-    // Rotation basique
     this.group.rotation.x += this.rotationSpeed * 0.5;
     this.group.rotation.y += this.rotationSpeed;
 
-    // Déformation basée sur l'audio
     const vertices = this.geometry.attributes.position.array;
     
     for(let i = 0; i < vertices.length; i += 3) {
@@ -64,7 +62,6 @@ export default class SpectrumTorus {
 
     this.geometry.attributes.position.needsUpdate = true;
     
-    // Animation des particules
     const particlePositions = this.particleGeometry.attributes.position.array;
     
     for(let i = 0; i < particlePositions.length; i += 3) {

@@ -32,11 +32,6 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.12);
-      transform: scale(1.08);
-    }
-
-    &:active {
-      transform: scale(0.95);
     }
 
     &.active {
@@ -71,12 +66,7 @@
     font-size: 18px;
 
     &:hover {
-      transform: scale(1.04);
       background: rgba(255, 255, 255, 0.9);
-    }
-
-    &:active {
-      transform: scale(0.97);
     }
   }
 }
