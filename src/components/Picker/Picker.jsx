@@ -20,7 +20,7 @@ const VISUALIZERS = [
     index: 3,
   },
   {
-    name: "Cube",
+    name: "Matrix",
     index: 4
   },
   {

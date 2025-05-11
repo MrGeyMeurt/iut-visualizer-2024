@@ -16,7 +16,7 @@ import Board from "./objects/Board";
 import LogoIut from "./objects/LogoIut";
 import Cover from "./objects/Cover";
 import audioController from "../utils/AudioController";
-import Cube from "./objects/Cube";
+import Matrix from "./objects/Matrix";
 import Particles from "./objects/Particles";
 import Torus from "./objects/Torus";
 
@@ -121,7 +121,7 @@ class Scene {
     this.board = new Board();
     this.logoIut = new LogoIut();
     this.cover = new Cover();
-    this.cube = new Cube();
+    this.matrix = new Matrix();
     this.particles = new Particles();
     this.torus = new Torus();
     // ....
@@ -206,9 +206,9 @@ class Scene {
         this.currentObject = this.cover;
         break;
       case 4:
-        // cube
+        // matrix
         this.camera.position.z = 20;
-        this.currentObject = this.cube;
+        this.currentObject = this.matrix;
         break;
       case 5:
         // particles

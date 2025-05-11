@@ -8,6 +8,7 @@ const Controls = () => {
   const isShuffle = useStore(state => state.isShuffle);
   const setIsMuted = useStore(state => state.setIsMuted);
   const setIsShuffle = useStore(state => state.setIsShuffle);
+  const { queue, clearQueue } = useStore();
 
   return (
     <div className={s.controls}>
@@ -28,7 +29,7 @@ const Controls = () => {
       </button>
       
       <PlayButton />
-      
+
       <button 
         className={s.navButton} 
         onClick={() => AudioController.nextTrack()}

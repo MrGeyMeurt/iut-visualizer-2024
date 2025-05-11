@@ -41,6 +41,8 @@ class AudioController {
     this.audio.addEventListener('timeupdate', this.updateTime);
     this.audio.addEventListener('loadedmetadata', this.updateDuration);
 
+    this.audio.addEventListener('ended', this.playNext);
+
     this.audio.crossOrigin = "anonymous";
     this.bpm = null;
 
@@ -80,6 +82,27 @@ class AudioController {
     this.audio.play().catch(error => {
       console.error("Erreur de lecture:", error);
     });
+  };
+
+  playNext = () => {
+    const { queue, tracks, currentTrackIndex, isShuffle } = useStore.getState();
+    
+    if (queue.length > 0) {
+      const [nextTrack, ...remaining] = queue;
+      this.play(nextTrack.preview);
+      useStore.setState({ queue: remaining });
+    } else if (tracks.length > 0) {
+      let newIndex;
+      if (isShuffle) {
+        do {
+          newIndex = Math.floor(Math.random() * tracks.length);
+        } while (newIndex === currentTrackIndex && tracks.length > 1);
+      } else {
+        newIndex = (currentTrackIndex + 1) % tracks.length;
+      }
+      this.play(tracks[newIndex].preview);
+      useStore.setState({ currentTrackIndex: newIndex });
+    }
   };
 
   tick = () => {
