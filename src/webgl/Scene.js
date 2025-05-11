@@ -17,6 +17,8 @@ import LogoIut from "./objects/LogoIut";
 import Cover from "./objects/Cover";
 import audioController from "../utils/AudioController";
 import Cube from "./objects/Cube";
+import Particles from "./objects/Particles";
+import Torus from "./objects/Torus";
 
 class Scene {
   constructor() {}
@@ -119,7 +121,9 @@ class Scene {
     this.board = new Board();
     this.logoIut = new LogoIut();
     this.cover = new Cover();
-    // this.cube = new Cube();
+    this.cube = new Cube();
+    this.particles = new Particles();
+    this.torus = new Torus();
     // ....
 
     // ajout de l'objet à la scène par défaut
@@ -200,6 +204,21 @@ class Scene {
 
         this.camera.position.z = 20;
         this.currentObject = this.cover;
+        break;
+      case 4:
+        // cube
+        this.camera.position.z = 20;
+        this.currentObject = this.cube;
+        break;
+      case 5:
+        // particles
+        this.camera.position.z = 20;
+        this.currentObject = this.particles;
+        break;
+      case 6:
+        // torus
+        this.camera.position.z = 20;
+        this.currentObject = this.torus;
         break;
       default:
         break;
