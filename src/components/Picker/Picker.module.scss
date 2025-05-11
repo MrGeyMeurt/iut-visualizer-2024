@@ -1,10 +1,12 @@
 .picker {
   position: fixed;
-  top: 24px;
-  right: 24px;
+  top: 50%;
+  left: 24px;
+  right: auto;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   color: white;
   z-index: 2;
 

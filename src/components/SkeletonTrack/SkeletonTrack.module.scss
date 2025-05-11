@@ -1,0 +1,85 @@
+.skeletonTrack {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  padding-left: 10px;
+  height: 60px;
+  width: 100%;
+
+  .order {
+    width: 10%;
+    height: 20px;
+    background: #2a2a2a;
+    border-radius: 4px;
+  }
+
+  .title {
+    width: 50%;
+    display: flex;
+    gap: 12px;
+
+    .cover {
+      width: 40px;
+      height: 40px;
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+
+    .details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .line {
+        height: 14px;
+        background: #2a2a2a;
+        width: 70%;
+        border-radius: 4px;
+      }
+
+      .sublime {
+        height: 12px;
+        background: #2a2a2a;
+        width: 40%;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .duration {
+    width: 20%;
+    height: 16px;
+    background: #2a2a2a;
+    border-radius: 4px;
+  }
+}
+
+// Animation shimmer
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeletonTrack {
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+    transform: translateX(-100%);
+  }
+}

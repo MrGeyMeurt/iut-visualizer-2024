@@ -1,0 +1,39 @@
+.currentTrack {
+  position: fixed;
+  bottom: 100px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  z-index: 1;
+  max-width: 300px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+
+  .cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    
+    .title {
+      font-weight: bold;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .artist {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+.controls {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.active {
+      color: #1db954;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3px;
+        height: 3px;
+        background: #1db954;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .navButton {
+    &:first-child,
+    &:last-child {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  button:nth-child(3) {
+    background: #fff;
+    color: #000;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+
+    &:hover {
+      transform: scale(1.04);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}

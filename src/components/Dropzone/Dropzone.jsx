@@ -1,7 +1,7 @@
 import s from "./Dropzone.module.scss";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
-import useStore from "../../utils/store";
+import { useStore } from "../../utils/store";
 import { fetchMetadata } from "../../utils/utils";
 
 import Button from "../Button/Button";
@@ -38,7 +38,7 @@ const Dropzone = () => {
     accept: {
       "audio/mpeg": [],
       "audio/mp3": [],
-      "audio/wav": [],
+      "audio/flac": [],
     },
   });
 
@@ -62,7 +62,7 @@ const Dropzone = () => {
       )} */}
 
       <div className={s.import}>
-        <p>Importez vos fichiers .mp3 en cliquant sur le bouton</p>
+        <p>Importez vos fichiers audio en cliquant sur le bouton</p>
         <Button label={"Browse"} onClick={open} />
       </div>
     </div>
