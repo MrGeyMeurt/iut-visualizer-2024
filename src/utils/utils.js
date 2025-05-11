@@ -36,7 +36,7 @@ export const fetchMetadata = async (TRACKS, tracks, setTracks) => {
                   }
 
                   resolve({
-                    index: track.id,
+                    id: track.id,
                     name: track.name,
                     title: title || track.name,
                     duration: audio.duration,
